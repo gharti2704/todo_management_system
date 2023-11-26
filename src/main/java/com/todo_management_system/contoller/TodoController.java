@@ -57,4 +57,11 @@ public class TodoController {
 
         return ResponseEntity.ok(todo);
     }
+
+    @PutMapping("uncomplete/{id}")
+    public ResponseEntity<TodoDto> uncompleteTodo(@PathVariable Long id) {
+        TodoDto todo = todoService.uncompleteTodo(id);
+
+        return ResponseEntity.ok(todo);
+    }
 }
