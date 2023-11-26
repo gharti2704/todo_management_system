@@ -60,6 +60,7 @@ public class TodoServiceImplementation implements TodoService {
 
     @Override
     public void deleteTodo(Long id) {
-
+        Optional<Todo> todo = todoRepository.findById(id);
+        todo.ifPresent(todoRepository::delete);
     }
 }
