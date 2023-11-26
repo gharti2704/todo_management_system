@@ -9,6 +9,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -42,7 +43,9 @@ public class TodoServiceImplementation implements TodoService {
 
     @Override
     public TodoDto getTodo(Long id) {
-        return null;
+        Todo todo = todoRepository.findById(id).orElseThrow(() -> new RuntimeException("Todo not found"));
+
+        return modelMapper.map(todo, TodoDto.class);
     }
 
     @Override
