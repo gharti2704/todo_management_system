@@ -1,10 +1,11 @@
 package com.todo_management_system.config;
 
+import com.todo_management_system.security.JwtAuthenticationEntryPoint;
+import com.todo_management_system.security.JwtAuthenticationFilter;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-//import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
@@ -12,21 +13,20 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-//import org.springframework.security.core.userdetails.User;
-//import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-//import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableMethodSecurity
 @AllArgsConstructor
-@NoArgsConstructor
 public class SpringSecurityConfig {
 
     private UserDetailsService userDetailsService;
+    private JwtAuthenticationFilter jwtAuthenticationFilter;
+    private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
     @Bean
     public static PasswordEncoder passwordEncoder(){
@@ -44,20 +44,18 @@ public class SpringSecurityConfig {
         // Using method reference
         // Only admins are able to access HTTP POST, PUT, and DELETE
         httpSecurity.csrf(AbstractHttpConfigurer::disable).authorizeHttpRequests((authorize) -> {
-            //Role based authorization
-//            authorize.requestMatchers(HttpMethod.POST, "/api/**").hasRole("ADMIN");
-//            authorize.requestMatchers(HttpMethod.PUT, "/api/**").hasRole("ADMIN");
-//            authorize.requestMatchers(HttpMethod.DELETE, "/api/**").hasRole("ADMIN");
-//            authorize.requestMatchers(HttpMethod.GET, "/api/**").hasAnyRole("ADMIN", "USER");
-//            authorize.requestMatchers(HttpMethod.PATCH, "/api/**").hasAnyRole("ADMIN", "USER");
-
             // Expose to public. Anyone can access the GET methods
-//             authorize.requestMatchers(HttpMethod.GET, "/api/**").permitAll();
+            //  authorize.requestMatchers(HttpMethod.GET, "/api/**").permitAll();
             authorize.requestMatchers("/api/auth/**").permitAll();
             authorize.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll();
             authorize.anyRequest().authenticated();
         }).httpBasic(Customizer.withDefaults());
 
+        //handle authentication exception
+        httpSecurity.exceptionHandling((exception) -> exception.authenticationEntryPoint(jwtAuthenticationEntryPoint));
+
+        //add jwt authentication in spring security filter chain
+        httpSecurity.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return httpSecurity.build();
     }
 
@@ -66,22 +64,4 @@ public class SpringSecurityConfig {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
         return configuration.getAuthenticationManager();
     }
-
-    /////////////////////// IN MEMORY AUTHENTICATION and AUTHORIZATION ////////////////////////////////
-//    @Bean
-//    public UserDetailsService userDetailsService() {
-//        UserDetails raju = User.builder()
-//                .username("raju")
-//                .password(passwordEncoder().encode("password"))
-//                .roles("USER")
-//                .build();
-//
-//        UserDetails admin = User.builder()
-//                .username("admin")
-//                .password(passwordEncoder().encode("admin"))
-//                .roles("ADMIN")
-//                .build();
-//
-//        return new InMemoryUserDetailsManager(raju, admin);
-//    }
 }
