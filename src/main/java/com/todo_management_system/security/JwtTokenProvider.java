@@ -3,7 +3,6 @@ package com.todo_management_system.security;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
@@ -13,10 +12,8 @@ import java.util.Date;
 @Component
 public class JwtTokenProvider {
 
-    @Value("${app.jwt-secret}")
     private String jwtSecrete;
 
-    @Value("${app.jwt-expiration-milliseconds}")
     private String jwtExpirationDate;
 
     // Decode jwt secret
