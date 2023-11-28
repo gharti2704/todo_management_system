@@ -63,7 +63,6 @@ public class AuthServiceImplementation implements AuthService {
                 loginDto.getUsernameOrEmail(),
                 loginDto.getPassword()
         ));
-        System.out.println("===============" + loginDto.getUsernameOrEmail());
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
