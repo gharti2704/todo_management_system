@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 //import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -53,6 +54,7 @@ public class SpringSecurityConfig {
             // Expose to public. Anyone can access the GET methods
 //             authorize.requestMatchers(HttpMethod.GET, "/api/**").permitAll();
             authorize.requestMatchers("/api/auth/**").permitAll();
+            authorize.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll();
             authorize.anyRequest().authenticated();
         }).httpBasic(Customizer.withDefaults());
 
