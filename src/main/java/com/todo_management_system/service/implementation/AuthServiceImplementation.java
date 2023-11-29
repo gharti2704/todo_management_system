@@ -32,6 +32,11 @@ public class AuthServiceImplementation implements AuthService {
     private AuthenticationManager authenticationManager;
     private JwtTokenProvider jwtTokenProvider;
 
+//    @Override
+//    public String toString() {
+//    	return registerDto.toString();
+//    }
+
     @Override
     public String register(RegisterDto registerDto) {
 
@@ -51,8 +56,7 @@ public class AuthServiceImplementation implements AuthService {
         user.setPassword(passwordEncoder.encode(registerDto.getPassword()));
 
         Set<Role> roles = new HashSet<>();
-        Role userRole = roleRepository.findByName("ROLE_USER");
-        roles.add(userRole);
+        roles.add(roleRepository.findByName(registerDto.getRole()));
 
         user.setRoles(roles);
         userRepository.save(user);
