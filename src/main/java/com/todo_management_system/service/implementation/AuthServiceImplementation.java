@@ -1,5 +1,6 @@
 package com.todo_management_system.service.implementation;
 
+import com.todo_management_system.dto.JwtAuthResponse;
 import com.todo_management_system.dto.LoginDto;
 import com.todo_management_system.dto.RegisterDto;
 import com.todo_management_system.entity.Role;
@@ -36,11 +37,11 @@ public class AuthServiceImplementation implements AuthService {
 
     // check if the user already exists in the db
         if(userRepository.existsByUsername(registerDto.getUsername())) {
-            throw new TodoAPIException(HttpStatus.BAD_REQUEST, "Existing username found.");
+            throw new TodoAPIException(HttpStatus.BAD_REQUEST, "Existing user found with that username, please login.");
         }
 
         if(userRepository.existsByEmail(registerDto.getEmail())) {
-            throw new TodoAPIException(HttpStatus.BAD_REQUEST, "Existing email found.");
+            throw new TodoAPIException(HttpStatus.BAD_REQUEST, "Existing user found with that email, please login.");
         }
 
         User user = new User();
@@ -60,7 +61,7 @@ public class AuthServiceImplementation implements AuthService {
     }
 
     @Override
-    public String login(LoginDto loginDto) {
+    public JwtAuthResponse login(LoginDto loginDto) {
        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                 loginDto.getUsernameOrEmail(),
                 loginDto.getPassword()
@@ -68,6 +69,16 @@ public class AuthServiceImplementation implements AuthService {
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        return jwtTokenProvider.generateJwtToken(authentication);
+        User user = userRepository.findByUsernameOrEmail(loginDto.getUsernameOrEmail(), loginDto.getUsernameOrEmail())
+                .orElseThrow(() -> new TodoAPIException(HttpStatus.BAD_REQUEST, "User not found."));
+
+        Role role = user.getRoles().stream().findFirst().orElseThrow(() -> new TodoAPIException(HttpStatus.BAD_REQUEST, "Role not found."));
+
+        JwtAuthResponse jwtAuthResponse = new JwtAuthResponse();
+        jwtAuthResponse.setJwtToken(jwtTokenProvider.generateJwtToken(authentication));
+        jwtAuthResponse.setRole(role.getName());
+        jwtAuthResponse.setName(user.getName());
+
+        return jwtAuthResponse;
     }
 }
