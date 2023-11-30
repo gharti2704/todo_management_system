@@ -45,6 +45,8 @@ public class UserServiceImplementation implements UserService {
         // delete user role from join table user_roles first
         User user =  userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
         user.getRoles().removeIf(role -> role.getId().equals(id));
+
+        user.getTodos().removeIf(todo -> todo.getId().equals(id));
         userRepository.deleteById(id);
     }
 }

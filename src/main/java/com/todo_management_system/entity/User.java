@@ -40,6 +40,6 @@ public class User {
     )
     private Set<Role> roles;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user")
     private Set<Todo> todos = new HashSet<>();
 }
