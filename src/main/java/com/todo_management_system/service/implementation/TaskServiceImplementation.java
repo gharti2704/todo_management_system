@@ -19,13 +19,20 @@ public class TaskServiceImplementation implements TaskService {
     public void addTask(Long userId, Long taskId) {
        User user =  userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
        Todo todo = todoRepository.findById(taskId).orElseThrow(() -> new RuntimeException("Todo not found"));
-
+       todo.setUser(user);
        user.getTodos().add(todo);
        userRepository.save(user);
+
+     user.getTodos().stream().filter(todo1 -> todo1.getId().equals(taskId)).findFirst().orElseThrow(() -> new RuntimeException("Todo not found"));
+
     }
 
     @Override
-    public void deleteTask(Long userId, Long taskId) {
+    public void removeTask(Long userId, Long taskId) {
+        User user =  userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        Todo todo = todoRepository.findById(taskId).orElseThrow(() -> new RuntimeException("Todo not found"));
 
+        user.getTodos().remove(todo);
+        userRepository.save(user);
     }
 }

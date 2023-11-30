@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Setter
@@ -39,6 +40,6 @@ public class User {
     )
     private Set<Role> roles;
 
-    @OneToMany(mappedBy = "title", cascade = CascadeType.ALL)
-    private Set<Todo> todos;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private Set<Todo> todos = new HashSet<>();
 }

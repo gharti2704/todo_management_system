@@ -1,5 +1,6 @@
 package com.todo_management_system.contoller;
 
+import com.todo_management_system.dto.TaskDto;
 import com.todo_management_system.service.TaskService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -16,8 +17,8 @@ public class TaskController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("add")
-    public ResponseEntity<String> addTask(Long userId, Long taskId) {
-        taskService.addTask(userId, taskId);
+    public ResponseEntity<String> addTask(@RequestBody TaskDto taskDto) {
+        taskService.addTask(taskDto.getUserId(), taskDto.getTaskId());
 
         return ResponseEntity.ok("Task added successfully");
     }
@@ -25,7 +26,7 @@ public class TaskController {
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("delete")
     public ResponseEntity<String> deleteTask(Long userId, Long taskId) {
-        taskService.deleteTask(userId, taskId);
+        taskService.removeTask(userId, taskId);
 
         return ResponseEntity.ok("Task deleted successfully");
     }
