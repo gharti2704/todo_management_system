@@ -25,8 +25,8 @@ public class TaskController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("delete")
-    public ResponseEntity<String> deleteTask(Long userId, Long taskId) {
-        taskService.removeTask(userId, taskId);
+    public ResponseEntity<String> deleteTask(@RequestBody TaskDto taskDto) {
+        taskService.removeTask(taskDto.getUserId(), taskDto.getTaskId());
 
         return ResponseEntity.ok("Task deleted successfully");
     }

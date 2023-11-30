@@ -34,5 +34,7 @@ public class TaskServiceImplementation implements TaskService {
 
         user.getTodos().remove(todo);
         userRepository.save(user);
+        todo.setUser(null);
+        todoRepository.save(todo);
     }
 }

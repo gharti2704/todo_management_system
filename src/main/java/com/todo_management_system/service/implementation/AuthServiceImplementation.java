@@ -32,11 +32,6 @@ public class AuthServiceImplementation implements AuthService {
     private AuthenticationManager authenticationManager;
     private JwtTokenProvider jwtTokenProvider;
 
-//    @Override
-//    public String toString() {
-//    	return registerDto.toString();
-//    }
-
     @Override
     public String register(RegisterDto registerDto) {
 
