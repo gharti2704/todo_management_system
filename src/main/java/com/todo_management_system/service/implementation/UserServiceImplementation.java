@@ -2,8 +2,6 @@ package com.todo_management_system.service.implementation;
 
 import com.todo_management_system.dto.TodoDto;
 import com.todo_management_system.dto.UserDto;
-import com.todo_management_system.entity.Role;
-import com.todo_management_system.entity.Todo;
 import com.todo_management_system.entity.User;
 import com.todo_management_system.repository.UserRepository;
 import com.todo_management_system.service.UserService;
@@ -12,7 +10,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
