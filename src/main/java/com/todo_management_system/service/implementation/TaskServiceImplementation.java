@@ -1,5 +1,7 @@
 package com.todo_management_system.service.implementation;
 
+import com.todo_management_system.entity.Todo;
+import com.todo_management_system.entity.User;
 import com.todo_management_system.repository.TodoRepository;
 import com.todo_management_system.repository.UserRepository;
 import com.todo_management_system.service.TaskService;
@@ -15,8 +17,8 @@ public class TaskServiceImplementation implements TaskService {
 
     @Override
     public void addTask(Long userId, Long taskId) {
-       var user =  userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
-       var todo = todoRepository.findById(taskId).orElseThrow(() -> new RuntimeException("Todo not found"));
+       User user =  userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+       Todo todo = todoRepository.findById(taskId).orElseThrow(() -> new RuntimeException("Todo not found"));
 
        user.getTodos().add(todo);
        userRepository.save(user);
