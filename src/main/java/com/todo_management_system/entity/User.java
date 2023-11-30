@@ -38,4 +38,7 @@ public class User {
            inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id")
     )
     private Set<Role> roles;
+
+    @OneToMany(mappedBy = "title", cascade = CascadeType.ALL)
+    private Set<Todo> todos;
 }
