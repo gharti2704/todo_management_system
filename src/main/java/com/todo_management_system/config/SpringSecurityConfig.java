@@ -47,6 +47,7 @@ public class SpringSecurityConfig {
             // Expose to public. Anyone can access the GET methods
             //  authorize.requestMatchers(HttpMethod.GET, "/api/**").permitAll();
             authorize.requestMatchers("/api/auth/**").permitAll();
+//            authorize.requestMatchers("/api/actuator/**").permitAll();
             authorize.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll();
             authorize.anyRequest().authenticated();
         }).httpBasic(Customizer.withDefaults());
